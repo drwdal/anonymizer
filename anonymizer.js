@@ -9,7 +9,7 @@ window.onload = function () {
 	var links = document.getElementsByTagName('a');
 	for(var i = 0; i < links.length; i++) {
 		var link = links[i];
-		if(link.href && link.href.match(/https?:\/\//)) {
+		if(link.href && link.href.match(/(?:https?:)?\/\//)) {
 			if(!window.opera && navigator.userAgent.search(/msie/i) == -1) {
 				link.href = "data:text/html," +
 						"<!doctype html><html><head>" + 
