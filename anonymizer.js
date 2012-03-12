@@ -16,7 +16,7 @@ anonymizer = function() {
 		if(link.href && link.href.match(/^(?:https?:)?\/\//)) {
 			if(navigator.userAgent.search(/msie/i) >= 0) {
 				// Internet Explorer (data URI scheme not implemented)
-				link.href = "javascript:window.open('" + addslashes(link.href) + "', '' + -~(Math.random()*1000));";
+				link.href = "javascript:window.open('" + addslashes(link.href) + "', 'something' + -~(Math.random()*1000));";
 			} else if(window.opera) {
 				// Opera (data URI scheme carries referrer)
 				link.href = "javascript:prompt('Copy/paste this into your address bar:', '" + addslashes(link.href) + "');void 0;";
