@@ -5,20 +5,31 @@
  *
  */
  
-window.onload = function () {
+anonymizer = function() {
+	var addslashes = function(str) {
+		return (str + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
+	}
+	
 	var links = document.getElementsByTagName('a');
 	for(var i = 0; i < links.length; i++) {
 		var link = links[i];
 		if(link.href && link.href.match(/^(?:https?:)?\/\//)) {
-			if(!window.opera && navigator.userAgent.search(/msie/i) == -1) {
-				link.href = "data:text/html," +
-						"<!doctype html><html><head>" + 
-							"<title>Redirecting...</title>" +
-							"<meta http-equiv=\"refresh\" content=\"0; url=" + link.href + "\">" +
-						"</head></html>";
+			if(navigator.userAgent.search(/msie/i) >= 0) {
+				// Internet Explorer (data URI scheme not implemented)
+				link.href = "javascript:window.open('" + addslashes(link.href) + "', '' + -~(Math.random()*1000));";
+			} else if(window.opera) {
+				// Opera (data URI scheme carries referrer)
+				link.href = "javascript:prompt('Copy/paste this into your address bar:', '" + addslashes(link.href) + "');void 0;";
 			} else {
-				/* Opera and IE are completely retarded. */
-				link.href = "javascript:prompt('Copy/paste this into your address bar:', '" + link.href + "');void 0;";
+				// Other
+				link.onclick = function() {
+					this.href = "data:text/html," +
+						"<!doctype html><html><head>" +
+							"<title>Redirecting...</title>" +
+							"<meta http-equiv=\"refresh\" content=\"0; url=" + this.href + "\">" +
+						"</head></html>";
+					return true;
+				};
 			}
 		}
 	}
